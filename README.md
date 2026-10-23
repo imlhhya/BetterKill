@@ -53,12 +53,6 @@ Set-ExecutionPolicy -Scope Process Bypass -Force
 - Fabric Loader（对应 1.20.1）
 - Fabric API（任意匹配 1.20.1 的版本）
 
-## 实现原理
-
-- `KillCommandMixin`：Mixin 注入原版 `KillCommand.execute`（`/kill` 字面量与 `targets` 参数两条路径的汇合点），拦截后暂存目标实体并提示数量（中文字面量），取消立即杀死。
-- `CommandManagerMixin`：在两条互补的注入点上做失效检查——`executeWithPrefix`（解析前，聊天/控制台/RCON/命令方块所有指令必经，打错的指令也能触发失效）与 `execute(ParseResults, String)`（解析后分派前，覆盖直接调用路径）。凡不是 `kill yes` 的指令一律清除发起者的待确认状态。
-- 模组初始化时通过 Fabric 的 `CommandRegistrationCallback` 给原版 `kill` 指令树注册 `yes` 字面量子节点用于确认。
-- `BetterKillTexts`：所有消息由服务端直接生成中文字面量（`Text.literal`），与客户端语言文件无关，保证客户端不装模组也能看到正确中文提示。
 
 ## 说明
 
