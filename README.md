@@ -49,7 +49,9 @@ Set-ExecutionPolicy -Scope Process Bypass -Force
 
 ## 安装
 
-在 Release 页面下载模组文件
+在 Release 页面下载模组文件.
+
+
 将 `betterkill-0.0.1.jar` 放入服务端的 `mods/` 目录（纯服务端模组，客户端无需安装），需要同时安装：
 - Fabric Loader（对应 1.20.1）
 - Fabric API（任意匹配 1.20.1 的版本）
