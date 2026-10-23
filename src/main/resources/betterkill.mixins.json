@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.betterkill.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "CommandManagerMixin",
+    "KillCommandMixin",
+    "ServerCommandSourceAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

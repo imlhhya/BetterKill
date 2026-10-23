@@ -1,0 +1,10 @@
+.gradle/
+.gradle-home/
+.tools/
+build/
+run/
+out/
+.idea/
+.vscode/
+*.iml
+logs/

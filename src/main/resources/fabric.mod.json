@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "betterkill",
+  "version": "${version}",
+  "name": "BetterKill",
+  "description": "给 /kill 指令加上二次确认：提示将杀死的实体数量，输入 /kill yes 才真正执行；执行任何其他指令会使确认失效。",
+  "authors": [
+    "BetterKill Developers"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.betterkill.BetterKillMod"
+    ]
+  },
+  "mixins": [
+    "betterkill.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*"
+  }
+}
