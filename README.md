@@ -60,6 +60,10 @@ Set-ExecutionPolicy -Scope Process Bypass -Force
 - 模组初始化时通过 Fabric 的 `CommandRegistrationCallback` 给原版 `kill` 指令树注册 `yes` 字面量子节点用于确认。
 - `BetterKillTexts`：所有消息由服务端直接生成中文字面量（`Text.literal`），与客户端语言文件无关，保证客户端不装模组也能看到正确中文提示。
 
+## 说明
+
+该模组由AI制作，可能会出现预期之外的问题，欢迎提出
+
 ## 许可
 
 MIT
