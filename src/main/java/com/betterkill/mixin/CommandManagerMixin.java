@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * 2) execute(ParseResults, String)（解析后、分派前入口）：executeWithPrefix 解析成功后
  *    会调用本方法，任何直接调用本方法的路径也被覆盖。
  *
- * 只要指令（可带或不带前导斜杠）归一化后不是“kill yes”，就清除发起者的待确认 kill。
+ * 只要指令（可带或不带前导斜杠）归一化后不是“killa”（确认指令），就清除发起者的待确认 kill。
  */
 @Mixin(CommandManager.class)
 public abstract class CommandManagerMixin {
@@ -43,7 +43,7 @@ public abstract class CommandManagerMixin {
         }
         String normalized = command.startsWith("/") ? command.substring(1) : command;
         normalized = normalized.trim().replaceAll("\\s+", " ");
-        if (!"kill yes".equals(normalized)) {
+        if (!"killa".equals(normalized)) {
             KillConfirmation.invalidate(source);
         }
     }

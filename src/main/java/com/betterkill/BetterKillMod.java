@@ -14,11 +14,12 @@ public class BetterKillMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        // 给原版 /kill 指令树注册一个 "yes" 字面量子节点（与之后注册的原版 kill 节点合并，不受注册顺序影响）。
+        // 注册独立的 /killa 确认指令：不再改动原版 /kill 指令树，
+        // 也避免 "yes" 字面量与实体选择器/玩家名产生混淆。
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
-                dispatcher.register(literal("kill")
+                dispatcher.register(literal("killa")
                         .requires(source -> source.hasPermissionLevel(2))
-                        .then(literal("yes").executes(context -> KillConfirmation.confirm(context.getSource())))
+                        .executes(context -> KillConfirmation.confirm(context.getSource()))
                 )
         );
 

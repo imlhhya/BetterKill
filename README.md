@@ -6,19 +6,20 @@
 
 - 管理员（玩家聊天、服务器 CLI、RCON）输入 `/kill <目标>`（例如 `/kill @e[type=item]`，也包括不带参数的 `/kill`）时，**不会立即执行**，而是只向指令发出者返回：
 
-  > 本次指令将杀死 [n] 个实体，确认杀死？（输入 /kill yes 确认）
+  > 本次指令将杀死 [n] 个实体，确认杀死？（输入 /killa 确认）
 
   其中 `[n]` 为将要被杀死的实体数量，并以**黄色字体**高亮显示。
 
-- 此时输入 `/kill yes` 才会真正完成 kill 指令，并返回 `已杀死 [n] 个实体。`
+- 此时输入 `/killa` 才会真正完成 kill 指令，并返回 `已杀死 [n] 个实体。`
 - 在确认之前，只要执行了**任何其他以 `/` 开头的指令**（无论指令是否存在、是否执行成功、是否打错），此次待确认的 kill 即告失效。
-- 若没有待确认的 kill，直接输入 `/kill yes`，聊天窗返回：
+- 若没有待确认的 kill，直接输入 `/killa`，聊天窗返回：
 
   > 没有指定杀死对象！
 
 - **所有提示均为服务端生成的中文字面量，客户端无需安装本模组**（纯服务端模组）。
 - 不同玩家之间、玩家与控制台之间的确认状态相互独立（以"指令发起者"为单位）；玩家退出服务器时其待确认状态自动清理。
 - **命令方块和数据包函数中的 `/kill` 保持原版行为**（不拦截），避免破坏自动化。
+- 确认指令为独立注册的 `/killa`，不改动原版 `/kill` 指令树，也不会与名为 "yes" 的玩家或实体选择器混淆。
 
 ## 构建
 
@@ -28,7 +29,7 @@
 gradlew build
 ```
 
-构建产物位于 `build/libs/betterkill-0.0.1.jar`。
+构建产物位于 `build/libs/betterkill-0.1.0.jar`。
 
 ## 测试运行
 
@@ -42,20 +43,17 @@ gradlew runServer                  # 专用服务器开发环境（需要 run/eu
 ```powershell
 # 在 run/server.properties 中确认: enable-rcon=true, rcon.port=25575, rcon.password=betterkill
 Set-ExecutionPolicy -Scope Process Bypass -Force
-& .\tools\rcon-test.ps1           # 14 项检查全部 PASS 即通过
+& .\tools\rcon-test.ps1           # 18 项检查全部 PASS 即通过
 ```
 
-测试覆盖：无目标 `/kill yes` 提示、`/kill @e[type=item]` 提示数量且不执行、其他指令使确认失效、`/kill yes` 恰好杀死统计数量、零匹配保留原版报错等。
+测试覆盖：无目标 `/killa` 提示、旧指令 `/kill yes` 已移除、`/kill @e[type=item]` 提示数量且不执行、其他指令（含无效指令）使确认失效、`/killa` 恰好杀死统计数量、零匹配保留原版报错等。
 
 ## 安装
 
-在 Release 页面下载模组文件.
-
-
-将 `betterkill-0.0.1.jar` 放入服务端的 `mods/` 目录（纯服务端模组，客户端无需安装），需要同时安装：
+在 Release 页面下载模组文件。
+将 `betterkill-0.1.0.jar` 放入服务端的 `mods/` 目录（纯服务端模组，客户端无需安装），需要同时安装：
 - Fabric Loader（对应 1.20.1）
 - Fabric API（任意匹配 1.20.1 的版本）
-
 
 ## 说明
 

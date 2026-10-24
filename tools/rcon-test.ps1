@@ -106,13 +106,13 @@ function Check([string]$name, [string]$cmd, [string[]]$expectAnyOf, [string[]]$e
 $stoneNbt = '@e[type=item,nbt={Item:{id:"minecraft:stone"}}]'
 
 # ---- test sequence ----
-Check "T1: bare /kill yes with no pending -> no_target" 'kill yes' @('没有指定杀死对象') | Out-Null
+Check "T1: bare /killa with no pending -> no_target" 'killa' @('没有指定杀死对象') | Out-Null
 
 for ($i = 1; $i -le 3; $i++) {
     Check "T2.$i : summon stone item #$i" 'summon minecraft:item ~ ~ ~ {Item:{id:"minecraft:stone",Count:1}}' @('Summoned') | Out-Null
 }
 
-$resp = Check "T3: /kill @e[type=item] -> Chinese prompt with yellow count" 'kill @e[type=item]' @('本次指令将杀死', '确认杀死', '§e') @('已杀死')
+$resp = Check "T3: /kill @e[type=item] -> Chinese prompt with yellow count" 'kill @e[type=item]' @('本次指令将杀死', '确认杀死', '/killa') @('已杀死')
 if ($resp -match '本次指令将杀死\s*§[0-9a-fk-or]*(?<n>\d+)(§[0-9a-fk-or]*)?\s*个实体') {
     $n = [int]$Matches['n']
 } elseif ($resp -match '本次指令将杀死 (?<n>\d+) 个实体') {
@@ -125,23 +125,31 @@ if ($n -lt 3) {
     Write-Host "WARN: expected at least 3 item entities, got $n"
 }
 
-Check "T4: invalid command also invalidates the pending kill" 'foobar123 not a command' @('Unknown or incomplete command', '未知或不完整的命令') | Out-Null
+Check "T4: old /kill yes no longer confirms (parsed as player name)" 'kill yes' @('No entity was found', '没有找到实体') @('没有指定杀死对象', '已杀死') | Out-Null
 
-Check "T5: /kill yes after invalid command -> no_target" 'kill yes' @('没有指定杀死对象') | Out-Null
+Check "T5: /killa after old-command attempt -> no_target" 'killa' @('没有指定杀死对象') | Out-Null
 
-Check "T6: another valid command invalidates the pending kill" 'say invalidate-check' @('') @('本次指令将杀死', '没有指定杀死对象') | Out-Null
+Check "T6: /kill @e[type=item] -> same count $n" 'kill @e[type=item]' @("本次指令将杀死*$n*个实体") @('已杀死') | Out-Null
 
-Check "T7: /kill yes after other command -> no_target" 'kill yes' @('没有指定杀死对象') | Out-Null
+Check "T7: invalid command also invalidates the pending kill" 'foobar123 not a command' @('Unknown or incomplete command', '未知或不完整的命令') | Out-Null
 
-Check "T8: /kill @e[type=item] -> same count $n" 'kill @e[type=item]' @("本次指令将杀死*$n*个实体") @('已杀死') | Out-Null
+Check "T8: /killa after invalid command -> no_target" 'killa' @('没有指定杀死对象') | Out-Null
 
-Check "T9: /kill yes -> kills exactly $n" 'kill yes' @("已杀死 $n 个实体") | Out-Null
+Check "T9: /kill @e[type=item] -> same count $n" 'kill @e[type=item]' @("本次指令将杀死*$n*个实体") @('已杀死') | Out-Null
 
-Check "T10: no stone items remain" "execute if entity $stoneNbt run say STONE_STILL_EXISTS" @('') @('STONE_STILL_EXISTS') | Out-Null
+Check "T10: another valid command invalidates the pending kill" 'say invalidate-check' @('') @('本次指令将杀死', '没有指定杀死对象') | Out-Null
 
-Check "T11: /kill yes again -> no_target" 'kill yes' @('没有指定杀死对象') | Out-Null
+Check "T11: /killa after other command -> no_target" 'killa' @('没有指定杀死对象') | Out-Null
 
-Check "T12: zero stone matches -> vanilla not-found error" "kill $stoneNbt" @('No entity was found') | Out-Null
+Check "T12: /kill @e[type=item] -> same count $n" 'kill @e[type=item]' @("本次指令将杀死*$n*个实体") @('已杀死') | Out-Null
+
+Check "T13: /killa -> kills exactly $n" 'killa' @("已杀死 $n 个实体") | Out-Null
+
+Check "T14: no stone items remain" "execute if entity $stoneNbt run say STONE_STILL_EXISTS" @('') @('STONE_STILL_EXISTS') | Out-Null
+
+Check "T15: /killa again -> no_target" 'killa' @('没有指定杀死对象') | Out-Null
+
+Check "T16: zero stone matches -> vanilla not-found error" "kill $stoneNbt" @('No entity was found') | Out-Null
 
 $tcp.Close()
 Write-Host "==============================="

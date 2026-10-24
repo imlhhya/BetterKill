@@ -15,7 +15,7 @@ public final class BetterKillTexts {
     public static Text prompt(int count) {
         return Text.literal("本次指令将杀死 ")
                 .append(Text.literal(String.valueOf(count)).formatted(Formatting.YELLOW))
-                .append(" 个实体，确认杀死？（输入 /kill yes 确认）");
+                .append(" 个实体，确认杀死？（输入 /killa 确认）");
     }
 
     public static Text noTarget() {
